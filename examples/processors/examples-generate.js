@@ -34,7 +34,11 @@ function createExampleDoc(example, deployment, stylesheets, scripts) {
       var filePath = /(https?:)?\/\//.test(dependencyPath) ?
         dependencyPath + dependency :
         path.join(dependencyPath, dependency);
-      exampleDoc.scripts.push({ path: filePath });
+      if ( filePath.match(/\.js$/) ) {
+        exampleDoc.scripts.push({ path: filePath });
+      } else if ( filePath.match(/\.css$/) ) {
+        exampleDoc.stylesheets.push({ path: filePath });
+      }
     });
   }
 
