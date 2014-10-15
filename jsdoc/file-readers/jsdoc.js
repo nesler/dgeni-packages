@@ -1,17 +1,23 @@
 var _ = require('lodash');
 var jsParser = require('esprima');
 var walk = require('../lib/walk');
+var log = require('dgeni').log;
 var LEADING_STAR = /^[^\S\r\n]*\*[^\S\n\r]?/gm;
 
 module.exports = {
   pattern: /\.js$/,
   processFile: function(filePath, contents, basePath) {
 
-    var ast = jsParser.parse(contents, {
-      loc: true,
-      range: true,
-      comment: true
-    });
+    try{
+      var ast = jsParser.parse(contents, {
+        loc: true,
+        range: true,
+        comment: true
+      });
+    }catch(ex){
+      log.error('File ' + filePath + ' contains syntax errors!')
+      throw ex;
+    }
 
     return _(ast.comments)
 
